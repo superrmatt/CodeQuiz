@@ -1,5 +1,8 @@
 $(document).ready(function() {
 
+    /*************************************************************************************/
+    //Global Variables
+
     /*
     * total quiz length in seconds; default is 100, test value is lower, so as not to wait 100 seconds :)
     */
@@ -13,12 +16,12 @@ $(document).ready(function() {
     /*
     * global variable, stores string question
     */
-   var question = "";
+    var question = "";
 
-   /*
-   * global variable, stores string answer choice 1
-   */
-   var answerOne = "";
+    /*
+    * global variable, stores string answer choice 1
+    */
+    var answerOne = "";
 
     /*
     * global variable, stores string answer choice 2
@@ -35,39 +38,35 @@ $(document).ready(function() {
     */
     var answerFour = "";
 
-    
-    //imports the questions to head of this file
-    importQuestions();
 
+    /*************************************************************************************/
+    //Listeners
 
     /* 
     * when start quiz button is clicked run initializeQuiz() function
     */
     $(".start-button").on("click", initializeQuiz());
-        
-        /*
-        need to build below with jquery
-        need to edit question section to display question
-        build html tags of both here
-        clear the existing stuff
-        edit html text in nextQuestion()
-        <div id="answers-group">
-            <div class="btn-group-vertical" role="group" aria-label="Button group">
-                <button type="button" class="btn btn-primary answer-choices">1</button>
-                <button type="button" class="btn btn-primary answer-choices">2</button>
-                <button type="button" class="btn btn-primary answer-choices">3</button>
-                <button type="button" class="btn btn-primary answer-choices">4</button>
-            </div>
-        </div>
 
-        
-        */
+    /* 
+    * when user clicks on an answer choice
+    * run isValid()
+    * isValid() goes to next question
+    */
+   $(".choices").on("click", function(e){
+        //run isvalid
+    });
 
+
+    /*************************************************************************************/
+    //Functions
 
     /*
     * initializes the quiz when start-button is clicked
     */    
     function initializeQuiz(){
+
+        //imports the questions to head of this file
+        importQuestions();
 
         var intro = $("#introduction");
         var Btn = $(".start-button");
@@ -91,31 +90,18 @@ $(document).ready(function() {
 
         intro.html(/*Insert question here*/"???????????");
 
-        //adds the new buttons, since we added first button by mutation of start button, only adding 3, i = 2 for ease of readabitiliy
+        //adds the new buttons, since we added first button by mutation of start button, only adding 3, i = 2 for ease of readability
         for(i = 2; i <= 4; i++){
             console.log("i = " + i);
             newButton.html("Answer " + i);
-            answerGroup.append(newButton);
-            answerGroup.append("<br>"); //tesing why above keeps overwriting
+            newButton.clone().appendTo(answerGroup);
         }
         
-        
-
-        
-
-        //build timer last so as not to penalize quiz-taker for javascript loading time
+        //run next question to get first question value
+        nextQuestion();
+        //build timer last so as not to penalize quiz-taker for javascript loading time if non-negligable
         buildTimer();
     }
-        
-
-    /* 
-    * when user clicks on an answer choice
-    * run isValid()
-    * isValid() goes to next question
-    */
-    $(".choices").on("click", function(e){
-        //run isvalid
-    });
 
     /*
     * imports questions.js
