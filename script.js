@@ -10,6 +10,31 @@ $(document).ready(function() {
     */
     var winOrLose = true; 
 
+    /*
+    * global variable, stores string question
+    */
+   var question = "";
+
+   /*
+   * global variable, stores string answer choice 1
+   */
+   var answerOne = "";
+
+    /*
+    * global variable, stores string answer choice 2
+    */
+    var answerTwo = "";
+
+    /*
+    * global variable, stores string answer choice 3
+    */
+    var answerThree = "";
+
+    /*
+    * global variable, stores string answer choice 4
+    */
+    var answerFour = "";
+
     
     //imports the questions to head of this file
     importQuestions();
@@ -43,18 +68,19 @@ $(document).ready(function() {
     * initializes the quiz when start-button is clicked
     */    
     function initializeQuiz(){
+
         var intro = $("#introduction");
         var Btn = $(".start-button");
         
-        var answerGroup = $("answer-group");
+        var answerGroup = $(".answer-group");
 
         var answerBtnType = "button",
             answerBtnClasses = "btn btn-primary answer-choices";
 
-        //builds new button template
+        //builds new button template, to be added 3 times
         var newButton = $("<button>");
-        newButton.attr("class", answerBtnClasses);
         newButton.attr("type", answerBtnType);
+        newButton.attr("class", answerBtnClasses);
 
         //empty, then change attribute values to make more sense with question/answer format
         intro.empty();
@@ -65,12 +91,14 @@ $(document).ready(function() {
 
         intro.html(/*Insert question here*/"???????????");
 
-        //adds the new buttons, since we added first button by mutation of start button, only adding 3, i = 2 for ease of logical
-        for(i = 2; i <= 4; i ++){
+        //adds the new buttons, since we added first button by mutation of start button, only adding 3, i = 2 for ease of readabitiliy
+        for(i = 2; i <= 4; i++){
             console.log("i = " + i);
             newButton.html("Answer " + i);
             answerGroup.append(newButton);
+            answerGroup.append("<br>"); //tesing why above keeps overwriting
         }
+        
         
 
         
@@ -104,7 +132,7 @@ $(document).ready(function() {
     * run code to show next question on screen
     */
     function nextQuestion(){
-        for(i = 0; i < questions.length; i ++){
+        for(i = 0; i < questions.length; i++){
             
         }
     }
