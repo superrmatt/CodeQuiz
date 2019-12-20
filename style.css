@@ -1,0 +1,7 @@
+/*  Mess with the margin and width, see what happens */
+
+.center {
+  margin: 3rem auto;
+  width: 600px;
+  border: 1px solid red;
+}
