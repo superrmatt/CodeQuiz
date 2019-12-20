@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    var seconds = 20; //total quiz length in seconds
+    var seconds = 10; //total quiz length in seconds; default is 100, test value is lower, so as not to wait 100 seconds :)
     var winOrLose = true; //tracks whether game ended with win or loss. true == win, false == loss.
 
     
@@ -55,6 +55,12 @@ $(document).ready(function() {
     */
     function changeTime(time){
         seconds = seconds + time;
+        if(seconds <= 0){
+            //game over, time has run out.
+            winOrLose = false;
+            gameEnd(winOrLose);
+            return;
+        }
         $(".timer").html("Time: " + seconds);
         console.log("changed time. seconds = " + seconds);
     }
@@ -77,7 +83,7 @@ $(document).ready(function() {
             if(seconds > 0){ //if time is not yet 0
                 changeTime(-1);
             } else {
-                //game over, time has hit 0
+                //game over, time has hit 0, this likely never runs due to handling in changeTime(), it is merely here just in case.
                 winOrLose = false;
                 gameEnd(winOrLose);
                 return;
