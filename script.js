@@ -42,10 +42,10 @@ $(document).ready(function() {
     function gameEnd(gameOver){
         if(gameOver == false){
             //lost game
-            alert("You Lost!");
+            console.log("You Lost!");
         } else if (gameOver == true){
             //won game
-            alert("You Won!");
+            console.log("You Won!");
         }
     }
 
