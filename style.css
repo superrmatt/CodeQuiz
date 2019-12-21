@@ -20,10 +20,10 @@ hr {
   opacity: 50%;
 }
 
-#end-message, #introduction{
+#end-message, #introduction, #highscore-text{
   font-size: 25px;
 }
 
-.initials-btn{
+.initials-btn, .clear-btn{
   margin-left: 5px;
 }

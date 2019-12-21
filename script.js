@@ -50,11 +50,7 @@ $(document).ready(function() {
     /*
     * When high scores button is clicked on navbar
     */
-    $(document).on("click", $(".initials-btn"), function(e){
-        //submit initials
-        //local storage stuffs
-            //get text input from $("#initials-input")
-            //save to local storage
+    $(document).on("click", ".initials-btn", function(e){
 
         var initials = $("#initials-input").val();
         localStorage.setItem('initials', initials);
@@ -212,7 +208,19 @@ $(document).ready(function() {
     * function called to build high score after 'submit' clicked
     */
     function buildHighScore(){
-        $("#end-message").text("Highscores");
+        var buttonAttr = "type=\"button\" class=\"btn btn-primary"
+
+        $(".game-end").remove();
+        $(".center").append("<div class=highscore>");
+        $(".highscore").append("<div id=highscore-text><strong>Highscores");
+        
+        //get highscore count, run for to determine how many to add, and add appropriately
+        $(".highscore").append("<div id=scores>test");
+
+
+        $(".highscore").append("<button " + buttonAttr + " back-btn\">Back");
+        $(".highscore").append("<button " + buttonAttr + " clear-btn\">Clear Highscores");
+
     }
 
     /*
