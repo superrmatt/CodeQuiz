@@ -9,11 +9,6 @@ $(document).ready(function() {
     var seconds = 100;
 
     /*
-    * tracks whether game ended with win or loss. true == win, false == loss.
-    */
-    var winOrLose = true; 
-
-    /*
     * stores current question as string
     */
     var question = "";
@@ -58,16 +53,26 @@ $(document).ready(function() {
     $(document).on("click", $(".initials-btn"), function(e){
         //submit initials
         //local storage stuffs
-            //get text input from $(".initials-input")
+            //get text input from $("#initials-input")
             //save to local storage
+
+        var initials = $("#initials-input").val();
+        localStorage.setItem('initials', initials);
+        localStorage.setItem('score', seconds);
+
+        var retrievedScore = localStorage.getItem('score'),
+            retrievedInitials = localStorage.getItem('initials');;
+
+        console.log("score = " + retrievedScore);
+        console.log("init  = " + retrievedInitials);
+
     });
 
     /* 
     * When start quiz button is clicked, initialize quiz
     */
     $(".start-button").on("click", function(){
-        console.log("start button");
-       
+               
         //imports the questions to head of this file
         importQuestions();
         //gets first question value, stores in global variables
@@ -108,7 +113,6 @@ $(document).ready(function() {
     * validate & respond accordingly.
     */
     $(document).on("click", ".answer-choices", function(e){
-        console.log("answer choices");
        
         var getValue = e.target.textContent;
 
@@ -137,7 +141,6 @@ $(document).ready(function() {
         return imported;
     }
 
-
     /*
     * accessor, gets current question, (title, answers, and correct answer) and stores in global variables
     */
@@ -163,8 +166,7 @@ $(document).ready(function() {
         //correct answer
         if(validity == true){
             if(questionNumber == questions.length - 1){
-                winOrLose = true;
-                quizEnd(winOrLose);
+                quizEnd();
                 return;
             }
             changeTime(+5);
@@ -195,15 +197,10 @@ $(document).ready(function() {
 
     /*
     * runs when quiz ends. 
-    * @arg gameOver == true if victorious, false if not
     */
-    function quizEnd(quizOver){
-        
-        if(quizOver == false){
-            //set timer to 0, else will display 1
-            clearInterval(intervalFunction);
-            $(".timer").html("Time: 0");
-        }
+    function quizEnd(){
+        //end timer
+        clearInterval(intervalFunction);
 
         //build score page
         buildEndPage();
@@ -231,8 +228,7 @@ $(document).ready(function() {
         seconds = seconds + delta;
         if(seconds <= 0){
             //game over, time has run out.
-            winOrLose = false;
-            quizEnd(winOrLose);
+            quizEnd();
             return;
         }
         $(".timer").html("Time: " + seconds);
@@ -251,11 +247,11 @@ $(document).ready(function() {
         */
         function start() {
             if(seconds > 0){ //if time is not yet 0
-                changeTime(-1); //decrement
+                changeTime(-1);
+                //decrement
             } else { //else
                 //time has hit 0, this should never run due to handling in changeTime(), it is merely here just in case.
-                winOrLose = false;
-                quizEnd(winOrLose);
+                quizEnd();
                 return;
             }
         }
@@ -274,5 +270,22 @@ $(document).ready(function() {
         for(i = 0; i < 4; i ++){
             $("#" + i).html(answers[i])
         }
+    }
+
+    /*
+    * mutator: sets the high score values
+    * @arg: initials, type string, stores initials
+    * @arg: score, type int, stores score value
+    */
+    function setHighScore(initials, score){
+        //set local storage baed on args
+    }
+
+    /*
+    * accessor: get high score as stores in local storage
+    * @arg: initials, stores string value of user in question
+    */
+    function getHighScore(initials){
+        //read local storage to get values
     }
 });
