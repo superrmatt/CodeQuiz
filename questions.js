@@ -5,6 +5,8 @@ var questions = [
         choices: ["string", "boolean", "alert", "int"],
         answer: "alert"
     },
+
+    /*
     {
         title: "The condition in an if / else statement is enclosed within ____.",
         choices: ["quotes", "curly brackets", "parentheses", "square brackets"],
@@ -51,6 +53,6 @@ var questions = [
         answer: "false"
 
     },
-
+*/
   ];
   

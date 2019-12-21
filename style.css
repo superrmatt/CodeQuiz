@@ -19,3 +19,11 @@ hr {
 .message {
   opacity: 50%;
 }
+
+#end-message, #introduction{
+  font-size: 25px;
+}
+
+.initials-btn{
+  margin-left: 5px;
+}

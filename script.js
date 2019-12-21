@@ -6,7 +6,7 @@ $(document).ready(function() {
     /*
     * total quiz length in seconds; default is 100, test value is lower, so as not to wait 100 seconds :)
     */
-    var seconds = 150;
+    var seconds = 100;
 
     /*
     * tracks whether game ended with win or loss. true == win, false == loss.
@@ -14,17 +14,17 @@ $(document).ready(function() {
     var winOrLose = true; 
 
     /*
-    * global variable, stores string question
+    * stores current question as string
     */
     var question = "";
 
     /*
-    * global variable, stores all answers as strings
+    * stores all current answer choices as string[]
     */
     var answers = ["", "", "", ""];
 
     /*
-    * global variable which stores correct question
+    * stores current correct answer
     */
     var correctAnswer = "";
 
@@ -42,19 +42,30 @@ $(document).ready(function() {
     */
     $(document).on("click", $(".high-scores"), function(e){
         //show high scores
+        //local storage stuffs
+            //load
+            
+    });
+
+    /*
+    * When high scores button is clicked on navbar
+    */
+    $(document).on("click", $(".initials-btn"), function(e){
+        //submit initials
+        //local storage stuffs
+            //get text input from $(".initials-input")
+            //save to local storage
     });
 
     /* 
     * When start quiz button is clicked, initialize quiz
     */
-   $(document).on("click", ".start-button", function(){
-
+    $(document).on("click", ".start-button", function(){
+       
         //imports the questions to head of this file
         importQuestions();
-        //run getQuestion() to get first question value
+        //gets first question value, stores in global variables
         getQuestion();
-
-        started = true;
  
         var intro = $("#introduction");
  
@@ -86,31 +97,27 @@ $(document).ready(function() {
         buildTimer();
     });
 
-
     /* 
     * when user clicks on an answer choice
     * validate & respond accordingly.
     */
-   $(document).on("click", ".answer-choices", function(e){
-
+    $(document).on("click", ".answer-choices", function(e){
+       
         var getValue = e.target.textContent;
 
         //correct answer
         if(getValue == correctAnswer){
             isValid(true);
-            console.log("correct");
         } 
         //wrong answer
         else if (getValue != correctAnswer){
             isValid(false);
-            console.log("incorrect");
         }
     });
 
 
     /*************************************************************************************/
     //Functions
-
 
     /*
     * imports questions.js
@@ -125,24 +132,23 @@ $(document).ready(function() {
 
 
     /*
-    * accessor, gets current question and associated values (answers and such)
+    * accessor, gets current question, (title, answers, and correct answer) and stores in global variables
     */
     function getQuestion(){
-        //set question
+        //get question, set to global
         question = questions[questionNumber].title;
 
-        //sets answers
+        //get answers, set to global
         for(i = 0; i < questions[questionNumber].choices.length; i++){
             answers[i] = questions[questionNumber].choices[i];
         }
         
-        //sets correct answer
+        //get correct answer, set to global
         correctAnswer = questions[questionNumber].answer;
     }
 
-
     /*
-    * responds based on validity of answer, mainly to keep listener a little cleaner looking
+    * responds based on validity of answer, mainly to keep ".answer-button" listener a little cleaner looking
     * @arg: validity type boolean = true if answer is correct, false if not
     */
     function isValid(validity){
@@ -156,22 +162,25 @@ $(document).ready(function() {
             }
             changeTime(+5);
 
-            $(".center").append("<div class=\"message\"><hr><p><i>Correct!</i></p></div>");
+            //append a small message, remove after 1 second
+            $(".center").append("<div class=\"message\"><hr><p><i>Correct!");
             setTimeout(function() {
                 $(".message").remove();
                 console.log("removed");
             }, 1000);
 
+            //increment questionNumber, get the next question and set html for next question
             questionNumber += 1
             getQuestion();
             setQA();
         }
-        
+
         //incorrect answer
         else if(validity == false){
             changeTime(-15);
             
-            $(".center").append("<div class=\"message\"><hr><p><i>Wrong!</i></p></div>");
+            //append a small message, remove after 1 second
+            $(".center").append("<div class=\"message\"><hr><p><i>Wrong!");
             setTimeout(function() {
                 $(".message").remove();
                 console.log("removed");
@@ -179,32 +188,41 @@ $(document).ready(function() {
         }
     }
 
-
     /*
-    * runs when game ends. 
+    * runs when quiz ends. 
     * @arg gameOver == true if victorious, false if not
     */
-    function gameEnd(gameOver){
-        //show score screen.
-        // create add high score button -> run associated function
-        if(gameOver == false){
-            //lost game
-            //changes time to 0
+    function quizEnd(quizOver){
+        
+        if(quizOver == false){
+            //set timer to 0, else will display 1
             $(".timer").html("Time: 0");
-            console.log("You Lost!");
-        } else if (gameOver == true){
-            //won game
-            console.log("You Won!");
         }
+
+        //build score page
+        buildEndPage();
     }
 
+    /*
+    * function which builds the ending page, called at completion
+    */
+    function buildEndPage(){
+        $(".answer-choices").remove();
+        $("#question").remove();
+        $(".answer-group").remove();
+        $(".center").append("<div class=\"game-end\">");
+        $(".game-end").append("<div id=\"end-message\"><strong>All Done!");
+        $(".game-end").append("<div id=\"score\"> Your score is: " + seconds);
+        $(".game-end").append("<div class=\"initials\">Enter initials: <input id=\"initials-input\"><button type=\"button\" class=\"btn btn-primary initials-btn\">Submit")
+    }
 
     /*
     * changes timer value.  
-    * @arg time == int in seconds, positive for positive change, negative for negative change
+    * @arg time == int delta in seconds
+    * delta being change
     */
-    function changeTime(time){
-        seconds = seconds + time;
+    function changeTime(delta){
+        seconds = seconds + delta;
         if(seconds <= 0){
             //game over, time has run out.
             winOrLose = false;
@@ -214,24 +232,22 @@ $(document).ready(function() {
         $(".timer").html("Time: " + seconds);
     }
 
-
     /*
     * builds the initial state of the timer
     */
     function buildTimer(){
         
-        //timer will always count every second, but if game has lost, and it has been recorded, timer will not change in value.
+        //timer will always count every second
         window.setInterval(start, 1000);
         
-
         /*
         * starts timer. 
         */
         function start() {
             if(seconds > 0){ //if time is not yet 0
-                changeTime(-1);
-            } else {
-                //game over, time has hit 0, this should never run due to handling in changeTime(), it is merely here just in case.
+                changeTime(-1); //decrement
+            } else { //else
+                //time has hit 0, this should never run due to handling in changeTime(), it is merely here just in case.
                 winOrLose = false;
                 gameEnd(winOrLose);
                 return;
@@ -241,7 +257,7 @@ $(document).ready(function() {
 
     /*
     * mutator: sets question & answer in html
-    * generally, to be called at correct answer
+    * generally, to be called upon correct answer
     * for this functionality to work properly (as intended), run getQuestions() first, to update current question
     */
     function setQA(){
