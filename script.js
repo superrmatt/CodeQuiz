@@ -38,13 +38,11 @@ $(document).ready(function() {
     //Listeners
 
     /*
-    * When high scores button is clicked on navbar
+    * When clear button is clicked
     */
-    $(document).on("click", $(".high-scores"), function(e){
-        //show high scores
-        //local storage stuffs
-            //load
-            
+    $(document).on("click", ".clear-btn", function(e){
+        localStorage.clear();
+        buildHighScore();
     });
 
     /*
@@ -55,12 +53,6 @@ $(document).ready(function() {
         var initials = $("#initials-input").val();
         localStorage.setItem('initials', initials);
         localStorage.setItem('score', seconds);
-
-        var retrievedScore = localStorage.getItem('score'),
-            retrievedInitials = localStorage.getItem('initials');;
-
-        console.log("score = " + retrievedScore);
-        console.log("init  = " + retrievedInitials);
 
         buildHighScore();
 
@@ -208,19 +200,29 @@ $(document).ready(function() {
     * function called to build high score after 'submit' clicked
     */
     function buildHighScore(){
-        var buttonAttr = "type=\"button\" class=\"btn btn-primary"
+        //makes adding buttons easier
+        var buttonAttr = "type=\"button\" class=\"btn btn-primary";
+        //makes adding tab easier
+        var tab = "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp";
 
+        //for when clear is clicked, not elegant, but works to alleviate dupe html.
+        $(".center").remove();
+        $(".row").append("<div class=\"col-md-7 center\">");
+
+        //out with the old, in with the new
         $(".game-end").remove();
         $(".center").append("<div class=highscore>");
         $(".highscore").append("<div id=highscore-text><strong>Highscores");
         
-        //get highscore count, run for to determine how many to add, and add appropriately
-        $(".highscore").append("<div id=scores>test");
-
-
-        $(".highscore").append("<button " + buttonAttr + " back-btn\">Back");
+        //how many items? update html appropriately.
+        for (i = 0; i < localStorage.length; i++)   {
+            let initTmp = localStorage.getItem("initials");
+            let scoreTmp = localStorage.getItem("score");
+            $(".highscore").append("<div class=scores>" + initTmp + tab + scoreTmp);
+        }
+        
+        $(".highscore").append("<button " + buttonAttr + " back-btn\" onclick=\"window.location=\'index.html\';\">Back");
         $(".highscore").append("<button " + buttonAttr + " clear-btn\">Clear Highscores");
-
     }
 
     /*
