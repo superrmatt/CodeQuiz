@@ -33,11 +33,6 @@ $(document).ready(function() {
     */
     var questionNumber = 0;
 
-    /*
-    * boolean, tracks whether quiz started
-    */
-    var started = false;
-
 
     /*************************************************************************************/
     //Listeners
@@ -46,19 +41,14 @@ $(document).ready(function() {
     * When high scores button is clicked on navbar
     */
     $(document).on("click", $(".high-scores"), function(e){
-
+        //show high scores
     });
 
     /* 
     * When start quiz button is clicked, initialize quiz
     */
-   $(document).on("click", $(".start-button"), function(){
+   $(document).on("click", ".start-button", function(){
 
-        //both events are being fired at button click. I think because JS is reading the original and changed attribute values, my current solution is to have this checker at start of each listener, but it doenst work
-        if(started == true){
-            console.log("Started = " + started);
-            return;
-        }
         //imports the questions to head of this file
         importQuestions();
         //run getQuestion() to get first question value
@@ -101,11 +91,7 @@ $(document).ready(function() {
     * when user clicks on an answer choice
     * validate & respond accordingly.
     */
-   $(document).on("click", $(".answer-choices"), function(e){
-        //both events are being fired at button click. I think because JS is reading the original and chnaged attribute values, my current solution is to have this checker at start of each listener
-        if(started == false){
-            return;
-        }
+   $(document).on("click", ".answer-choices", function(e){
 
         var getValue = e.target.textContent;
 
@@ -160,9 +146,6 @@ $(document).ready(function() {
     * @arg: validity type boolean = true if answer is correct, false if not
     */
     function isValid(validity){
-        //increment question #
-        //run get question
-        //change html to reflect new questions
 
         //correct answer
         if(validity == true){
@@ -218,7 +201,7 @@ $(document).ready(function() {
 
 
     /*
-    * builds the initial state of the timber object
+    * builds the initial state of the timer
     */
     function buildTimer(){
         
@@ -242,7 +225,7 @@ $(document).ready(function() {
     }
 
     /*
-    * mutator: sets question & answer
+    * mutator: sets question & answer in html
     * generally, to be called at correct answer
     * for this functionality to work properly (as intended), run getQuestions() first, to update current question
     */
