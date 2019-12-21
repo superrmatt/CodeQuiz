@@ -149,7 +149,7 @@ $(document).ready(function() {
 
         //correct answer
         if(validity == true){
-            if(questionNumber >= questions.length){
+            if(questionNumber == questions.length - 1){
                 gameEnd(true);
                 return;
             }
@@ -160,7 +160,7 @@ $(document).ready(function() {
         }
         //incorrect answer
         else if(validity == false){
-            changeTime(-5);
+            changeTime(-15);
         }
     }
 
