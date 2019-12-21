@@ -6,7 +6,7 @@ $(document).ready(function() {
     /*
     * total quiz length in seconds; default is 100, test value is lower, so as not to wait 100 seconds :)
     */
-    var seconds = 10;
+    var seconds = 15;
 
     /*
     * tracks whether game ended with win or loss. true == win, false == loss.
@@ -33,60 +33,82 @@ $(document).ready(function() {
     */
     var questionNumber = 0;
 
+    /*
+    * boolean, tracks whether quiz started
+    */
+    var started = false;
+
 
     /*************************************************************************************/
     //Listeners
 
+
     /* 
     * when start quiz button is clicked, initialize quiz
     */
-    $(".start-button").click(function(){
-         //imports the questions to head of this file
-         importQuestions();
+   $(document).on("click", $(".start-button"), function(e){
 
-         //run getQuestion() to get first question value
-         getQuestion();
+        //both events are being fired at button click. I think because JS is reading the original and chnaged attribute values, my current solution is to have this checker at start of each listener
+        if(started == true){
+            return;
+        }
+        //imports the questions to head of this file
+        importQuestions();
+        //run getQuestion() to get first question value
+        getQuestion();
+
+        started = true;
  
-         var intro = $("#introduction");
+        var intro = $("#introduction");
  
-         $(".start-button").remove();
+        $(".start-button").remove();
          
-         var answerGroup = $(".answer-group");
+        var answerGroup = $(".answer-group");
  
-         var answerBtnType = "button",
-             answerBtnClasses = "btn btn-primary answer-choices";
+        var answerBtnType = "button",
+            answerBtnClasses = "btn btn-primary answer-choices";
  
-         //builds new button template, to be added 3 times
-         var newButton = $("<button>");
-         newButton.attr("type", answerBtnType);
-         newButton.attr("class", answerBtnClasses);
+        //builds new button template, to be added 3 times
+        var newButton = $("<button>");
+        newButton.attr("type", answerBtnType);
+        newButton.attr("class", answerBtnClasses);
  
-         //empty, then change attribute values to make more sense with question/answer format
-         intro.empty();
-         intro.attr("id", "question");
+        //empty, then change attribute values to make more sense with question/answer format
+        intro.empty();
+        intro.attr("id", "question");
+        intro.html(question);
  
-         intro.html(question);
- 
-         //adds the new buttons, since we added first button by mutation of start button, only adding 3, i = 2 for ease of readability
-         for(i = 0; i < 4; i++){
-             console.log("i = " + i);
-             newButton.html(answers[i]);
-             newButton.clone().appendTo(answerGroup);
-         }
+        //adds the new buttons
+        for(i = 0; i < 4; i++){
+            newButton.html(answers[i]);
+            newButton.clone().appendTo(answerGroup);
+        }
          
-         //build timer last so as not to penalize quiz-taker for javascript loading time if non-negligable
-         buildTimer();
-
-
+        //build timer last so as not to penalize quiz-taker for javascript loading time if non-negligable
+        buildTimer();
     });
+
 
     /* 
     * when user clicks on an answer choice
-    * run isValid()
-    * isValid() goes to next question
+    * validate & respond accordingly.
     */
-   $(".choices").on("click", function(e){
-        //run isvalid
+   $(document).on("click", $(".answer-choices"), function(e){
+        //both events are being fired at button click. I think because JS is reading the original and chnaged attribute values, my current solution is to have this checker at start of each listener
+        if(started == false){
+            return;
+        }
+        var getValue = e.target.textContent;
+        if(getValue == correctAnswer){
+            //correct answer
+            console.log("correct");
+        } else if (getValue != correctAnswer){
+            //wrong answer
+            changeTime(-5);
+            console.log("incorrect");
+        }
+
+        
     });
 
 
@@ -105,6 +127,7 @@ $(document).ready(function() {
         return imported;
     }
 
+
     /*
     * accessor, gets current question and associated values (answers and such)
     */
@@ -121,6 +144,7 @@ $(document).ready(function() {
         correctAnswer = questions[questionNumber].answer;
     }
 
+
     /*
     * determines validity of chosen answer
     */
@@ -130,23 +154,27 @@ $(document).ready(function() {
         //increment question #
         //run get question
         //change html to reflect new questions
-        
-
     }
+
 
     /*
     * runs when game ends. 
     * @arg gameOver == true if victorious, false if not
     */
     function gameEnd(gameOver){
+        //show score screen.
+        // create add high score button -> run associated function
         if(gameOver == false){
             //lost game
+            //changes time to 0
+            $(".timer").html("Time: 0");
             console.log("You Lost!");
         } else if (gameOver == true){
             //won game
             console.log("You Won!");
         }
     }
+
 
     /*
     * changes timer value.  
@@ -161,21 +189,20 @@ $(document).ready(function() {
             return;
         }
         $(".timer").html("Time: " + seconds);
-        console.log("changed time. seconds = " + seconds);
     }
+
 
     /*
     * builds the initial state of the timber object
     */
     function buildTimer(){
-        console.log("building timer");
-        console.log("seconds  = " + seconds);
         
-        //timer will always count every second, but if game has lost, through magic in the code, timer will not change in value.
+        //timer will always count every second, but if game has lost, and it has been recorded, timer will not change in value.
         window.setInterval(start, 1000);
         
+
         /*
-        * start timer. 
+        * starts timer. 
         */
         function start() {
             if(seconds > 0){ //if time is not yet 0
