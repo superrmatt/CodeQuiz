@@ -66,6 +66,8 @@ $(document).ready(function() {
         console.log("score = " + retrievedScore);
         console.log("init  = " + retrievedInitials);
 
+        buildHighScore();
+
     });
 
     /* 
@@ -204,6 +206,13 @@ $(document).ready(function() {
 
         //build score page
         buildEndPage();
+    }
+
+    /*
+    * function called to build high score after 'submit' clicked
+    */
+    function buildHighScore(){
+        $("#end-message").text("Highscores");
     }
 
     /*
