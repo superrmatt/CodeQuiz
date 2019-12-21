@@ -11,3 +11,11 @@
   padding-bottom: 5px;
 }
   
+hr {
+  color: black;
+  width: 100%;
+}
+
+.message {
+  opacity: 50%;
+}

@@ -150,17 +150,32 @@ $(document).ready(function() {
         //correct answer
         if(validity == true){
             if(questionNumber == questions.length - 1){
-                gameEnd(true);
+                winOrLose = true;
+                gameEnd(winOrLose);
                 return;
             }
             changeTime(+5);
+
+            $(".center").append("<div class=\"message\"><hr><p><i>Correct!</i></p></div>");
+            setTimeout(function() {
+                $(".message").remove();
+                console.log("removed");
+            }, 1000);
+
             questionNumber += 1
             getQuestion();
             setQA();
         }
+        
         //incorrect answer
         else if(validity == false){
             changeTime(-15);
+            
+            $(".center").append("<div class=\"message\"><hr><p><i>Wrong!</i></p></div>");
+            setTimeout(function() {
+                $(".message").remove();
+                console.log("removed");
+            }, 1000); 
         }
     }
 
