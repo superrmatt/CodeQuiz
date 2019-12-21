@@ -42,14 +42,21 @@ $(document).ready(function() {
     /*************************************************************************************/
     //Listeners
 
+    /*
+    * When high scores button is clicked on navbar
+    */
+    $(document).on("click", $(".high-scores"), function(e){
+
+    });
 
     /* 
-    * when start quiz button is clicked, initialize quiz
+    * When start quiz button is clicked, initialize quiz
     */
-   $(document).on("click", $(".start-button"), function(e){
+   $(document).on("click", $(".start-button"), function(){
 
         //both events are being fired at button click. I think because JS is reading the original and changed attribute values, my current solution is to have this checker at start of each listener, but it doenst work
         if(started == true){
+            console.log("Started = " + started);
             return;
         }
         //imports the questions to head of this file
@@ -135,15 +142,15 @@ $(document).ready(function() {
     * accessor, gets current question and associated values (answers and such)
     */
     function getQuestion(){
-        //get question
+        //set question
         question = questions[questionNumber].title;
 
-        //gets answers
+        //sets answers
         for(i = 0; i < questions[questionNumber].choices.length; i++){
             answers[i] = questions[questionNumber].choices[i];
         }
         
-        //gets correct answer
+        //sets correct answer
         correctAnswer = questions[questionNumber].answer;
     }
 
@@ -159,6 +166,10 @@ $(document).ready(function() {
 
         //correct answer
         if(validity == true){
+            if(questionNumber >= questions.length){
+                gameEnd(true);
+                return;
+            }
             changeTime(+5);
             questionNumber += 1
             getQuestion();
@@ -237,7 +248,6 @@ $(document).ready(function() {
     */
     function setQA(){
         //edit question html
-        console.log(question);
         $("#question").html(question);
 
         //edit button html

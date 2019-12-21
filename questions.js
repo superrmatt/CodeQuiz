@@ -22,7 +22,7 @@ var questions = [
     },
     {
         title: "what happens when we run 'console.log(x)'?",
-        choices: ["a log file is created", "the variable x is printed to the console.", "log() is not a valid function call for the console object", "2pac is still alive"],
+        choices: ["a log file is created", "the variable x is printed to the console", "log() is not a valid function call for the console object", "2pac is still alive"],
         answer: "the variable x is printed to the console"
     },
     {
