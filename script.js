@@ -6,7 +6,7 @@ $(document).ready(function() {
     /*
     * total quiz length in seconds; default is 100, test value is lower, so as not to wait 100 seconds :)
     */
-    var seconds = 15;
+    var seconds = 150;
 
     /*
     * tracks whether game ended with win or loss. true == win, false == loss.
@@ -48,7 +48,7 @@ $(document).ready(function() {
     */
    $(document).on("click", $(".start-button"), function(e){
 
-        //both events are being fired at button click. I think because JS is reading the original and chnaged attribute values, my current solution is to have this checker at start of each listener
+        //both events are being fired at button click. I think because JS is reading the original and changed attribute values, my current solution is to have this checker at start of each listener, but it doenst work
         if(started == true){
             return;
         }
@@ -81,6 +81,7 @@ $(document).ready(function() {
         //adds the new buttons
         for(i = 0; i < 4; i++){
             newButton.html(answers[i]);
+            newButton.attr("id", i);
             newButton.clone().appendTo(answerGroup);
         }
          
@@ -98,17 +99,19 @@ $(document).ready(function() {
         if(started == false){
             return;
         }
+
         var getValue = e.target.textContent;
+
+        //correct answer
         if(getValue == correctAnswer){
-            //correct answer
+            isValid(true);
             console.log("correct");
-        } else if (getValue != correctAnswer){
-            //wrong answer
-            changeTime(-5);
+        } 
+        //wrong answer
+        else if (getValue != correctAnswer){
+            isValid(false);
             console.log("incorrect");
         }
-
-        
     });
 
 
@@ -146,14 +149,25 @@ $(document).ready(function() {
 
 
     /*
-    * determines validity of chosen answer
+    * responds based on validity of answer, mainly to keep listener a little cleaner looking
+    * @arg: validity type boolean = true if answer is correct, false if not
     */
-    function isValid(){
-        //if correct, add time
-        //if wrong, deduct time
+    function isValid(validity){
         //increment question #
         //run get question
         //change html to reflect new questions
+
+        //correct answer
+        if(validity == true){
+            changeTime(+5);
+            questionNumber += 1
+            getQuestion();
+            setQA();
+        }
+        //incorrect answer
+        else if(validity == false){
+            changeTime(-5);
+        }
     }
 
 
@@ -213,6 +227,22 @@ $(document).ready(function() {
                 gameEnd(winOrLose);
                 return;
             }
+        }
+    }
+
+    /*
+    * mutator: sets question & answer
+    * generally, to be called at correct answer
+    * for this functionality to work properly (as intended), run getQuestions() first, to update current question
+    */
+    function setQA(){
+        //edit question html
+        console.log(question);
+        $("#question").html(question);
+
+        //edit button html
+        for(i = 0; i < 4; i ++){
+            $("#" + i).html(answers[i])
         }
     }
 });
