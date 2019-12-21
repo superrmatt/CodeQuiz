@@ -33,6 +33,11 @@ $(document).ready(function() {
     */
     var questionNumber = 0;
 
+    /*
+    * 
+    */
+    var intervalFunction = null;
+
 
     /*************************************************************************************/
     //Listeners
@@ -60,7 +65,8 @@ $(document).ready(function() {
     /* 
     * When start quiz button is clicked, initialize quiz
     */
-    $(document).on("click", ".start-button", function(){
+    $(".start-button").on("click", function(){
+        console.log("start button");
        
         //imports the questions to head of this file
         importQuestions();
@@ -102,6 +108,7 @@ $(document).ready(function() {
     * validate & respond accordingly.
     */
     $(document).on("click", ".answer-choices", function(e){
+        console.log("answer choices");
        
         var getValue = e.target.textContent;
 
@@ -157,7 +164,7 @@ $(document).ready(function() {
         if(validity == true){
             if(questionNumber == questions.length - 1){
                 winOrLose = true;
-                gameEnd(winOrLose);
+                quizEnd(winOrLose);
                 return;
             }
             changeTime(+5);
@@ -166,7 +173,6 @@ $(document).ready(function() {
             $(".center").append("<div class=\"message\"><hr><p><i>Correct!");
             setTimeout(function() {
                 $(".message").remove();
-                console.log("removed");
             }, 1000);
 
             //increment questionNumber, get the next question and set html for next question
@@ -183,7 +189,6 @@ $(document).ready(function() {
             $(".center").append("<div class=\"message\"><hr><p><i>Wrong!");
             setTimeout(function() {
                 $(".message").remove();
-                console.log("removed");
             }, 1000); 
         }
     }
@@ -196,6 +201,7 @@ $(document).ready(function() {
         
         if(quizOver == false){
             //set timer to 0, else will display 1
+            clearInterval(intervalFunction);
             $(".timer").html("Time: 0");
         }
 
@@ -226,7 +232,7 @@ $(document).ready(function() {
         if(seconds <= 0){
             //game over, time has run out.
             winOrLose = false;
-            gameEnd(winOrLose);
+            quizEnd(winOrLose);
             return;
         }
         $(".timer").html("Time: " + seconds);
@@ -238,10 +244,10 @@ $(document).ready(function() {
     function buildTimer(){
         
         //timer will always count every second
-        window.setInterval(start, 1000);
-        
+        intervalFunction = window.setInterval(start, 1000);
+
         /*
-        * starts timer. 
+        * starts & runs timer. 
         */
         function start() {
             if(seconds > 0){ //if time is not yet 0
@@ -249,7 +255,7 @@ $(document).ready(function() {
             } else { //else
                 //time has hit 0, this should never run due to handling in changeTime(), it is merely here just in case.
                 winOrLose = false;
-                gameEnd(winOrLose);
+                quizEnd(winOrLose);
                 return;
             }
         }
