@@ -46,7 +46,7 @@ $(document).ready(function() {
     });
 
     /*
-    * When high scores button is clicked on navbar
+    * when submit button on quiz end page clicked
     */
     $(document).on("click", ".initials-btn", function(e){
 
