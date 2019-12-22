@@ -38,7 +38,7 @@ $(document).ready(function() {
     //Listeners
 
     /*
-    * When clear button is clicked
+    * When clear high score button is clicked
     */
     $(document).on("click", ".clear-btn", function(e){
         localStorage.clear();
@@ -49,20 +49,17 @@ $(document).ready(function() {
     * when submit button on quiz end page clicked
     */
     $(document).on("click", ".initials-btn", function(e){
-
         var initials = $("#initials-input").val();
         localStorage.setItem('initials', initials);
         localStorage.setItem('score', seconds);
 
         buildHighScore();
-
     });
 
     /* 
     * When start quiz button is clicked, initialize quiz
     */
-    $(".start-button").on("click", function(){
-               
+    $(".start-button").on("click", function(){ 
         //imports the questions to head of this file
         importQuestions();
         //gets first question value, stores in global variables
@@ -103,7 +100,6 @@ $(document).ready(function() {
     * validate & respond accordingly.
     */
     $(document).on("click", ".answer-choices", function(e){
-       
         var getValue = e.target.textContent;
 
         //correct answer
@@ -152,7 +148,6 @@ $(document).ready(function() {
     * @arg: validity type boolean = true if answer is correct, false if not
     */
     function isValid(validity){
-
         //correct answer
         if(validity == true){
             if(questionNumber == questions.length - 1){
@@ -191,7 +186,6 @@ $(document).ready(function() {
     function quizEnd(){
         //end timer
         clearInterval(intervalFunction);
-
         //build score page
         buildEndPage();
     }
@@ -226,7 +220,7 @@ $(document).ready(function() {
     }
 
     /*
-    * function which builds the ending page, called at completion
+    * function which builds the ending page, called at completion of quiz
     */
     function buildEndPage(){
         $(".answer-choices").remove();
@@ -257,7 +251,6 @@ $(document).ready(function() {
     * builds the initial state of the timer
     */
     function buildTimer(){
-        
         //timer will always count every second
         intervalFunction = window.setInterval(start, 1000);
 
@@ -289,22 +282,5 @@ $(document).ready(function() {
         for(i = 0; i < 4; i ++){
             $("#" + i).html(answers[i])
         }
-    }
-
-    /*
-    * mutator: sets the high score values
-    * @arg: initials, type string, stores initials
-    * @arg: score, type int, stores score value
-    */
-    function setHighScore(initials, score){
-        //set local storage baed on args
-    }
-
-    /*
-    * accessor: get high score as stores in local storage
-    * @arg: initials, stores string value of user in question
-    */
-    function getHighScore(initials){
-        //read local storage to get values
     }
 });
